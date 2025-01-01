@@ -105,14 +105,8 @@ model Address {
   pincode      String
   phoneNumber  String
 
-
+  
   orders       Order[]
-
-
-
-
-
-
 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt

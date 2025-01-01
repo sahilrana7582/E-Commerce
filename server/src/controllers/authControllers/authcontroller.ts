@@ -74,3 +74,15 @@ export const logout = (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+//test
+
+export const allusers = async (req: Request, res: Response) => {
+  try {
+    const user = await prisma.user.findMany();
+
+    res.status(200).json({ message: 'User Created Successfully', user });
+  } catch (e) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

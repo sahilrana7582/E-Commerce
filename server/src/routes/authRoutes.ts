@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  allusers,
   loadUser,
   logout,
   signIn,
@@ -8,7 +9,7 @@ import {
 import { isAuth } from '../middlewares/isAuth';
 const authRoutes = express.Router();
 
-authRoutes.route('/signup').post(signUp);
+authRoutes.route('/signup').post(signUp).get(allusers);
 authRoutes.route('/signin').post(signIn);
 authRoutes.route('/logout').post(logout);
 

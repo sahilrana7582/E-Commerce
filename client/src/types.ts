@@ -9,3 +9,11 @@ export type ProductType = {
   sizes: ('SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL')[];
   seller: string;
 };
+
+export type ProductList = {
+  id: string;
+  name: string;
+  category: 'Male' | 'Female';
+  imageUrl: string;
+  price: number;
+};

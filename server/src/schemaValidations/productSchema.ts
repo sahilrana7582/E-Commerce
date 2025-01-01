@@ -20,6 +20,16 @@ export const productSchema = z.object({
     .min(1, { message: 'At least one size must be selected' }),
 
   seller: z.string().min(1, { message: 'Seller ID is required' }),
+  bestSeller: z.boolean(),
 });
 
 export type ProductType = z.infer<typeof productSchema>;
+
+export const AddressType = z.object({
+  streetName: z.string(),
+  city: z.string(),
+  state: z.string(),
+  country: z.string(),
+  pincode: z.string(),
+  phoneNumber: z.string(),
+});

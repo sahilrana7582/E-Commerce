@@ -3,6 +3,7 @@ import HomeLayout from './layouts/HomeLayout';
 import Home from './components/HomeComponents/Home';
 import Admin from './pages/AdminsPage/Admin';
 import NewItem from './pages/AdminsPage/NewItems';
+import { ListTable } from './pages/AdminsPage/ListTable';
 
 const routes = createBrowserRouter([
   {
@@ -35,7 +36,7 @@ const routes = createBrowserRouter([
           },
           {
             path: 'list',
-            element: <div>List</div>,
+            element: <ListTable />,
           },
           {
             path: 'orders',
