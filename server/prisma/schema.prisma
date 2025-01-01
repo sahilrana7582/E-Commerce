@@ -114,7 +114,8 @@ model Address {
 
 model Order{
   id           String       @id @default(uuid())
-  product      ProductDetail[]
+  productId    String
+  product      ProductDetail @relation(fields: [productId], references: [id], onDelete: Cascade)
   buyerInfo    User         @relation(fields: [buyer], references: [id], onDelete: Cascade)
   buyer        String
   quantity     Int

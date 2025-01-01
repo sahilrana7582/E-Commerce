@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   AddressType,
+  orderSchema,
   productSchema,
 } from '../../schemaValidations/productSchema';
 import { prisma } from '../../prisma';
@@ -83,6 +84,97 @@ export const addAddress = async (req: Request, res: Response) => {
       message: 'Address added successfully',
     });
   } catch (e) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const productDetail = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const product = await prisma.productDetail.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    res.status(201).json({
+      message: 'Product Detail',
+      product,
+    });
+  } catch (e) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const orderProduct = async (req: Request, res: Response) => {
+  try {
+    const isSafe = orderSchema.safeParse(req.body);
+    if (!isSafe.success) {
+      console.log(isSafe.error);
+      return res.status(400).json({ message: isSafe.error.errors[0].message });
+    }
+    const { buyer, quantity, shippingAddress, totalAmount, productId } =
+      isSafe.data;
+
+    const order = await prisma.order.create({
+      data: {
+        productId,
+        quantity,
+        totalAmount,
+        status: 'ORDERED',
+        buyer,
+        shippingAddress,
+      },
+    });
+    res.status(201).json({
+      message: 'Order placed successfully',
+      order,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const allOrders = async (req: Request, res: Response) => {
+  try {
+    const orders = await prisma.order.findMany({
+      include: {
+        product: {
+          select: {
+            name: true,
+            description: true,
+            price: true,
+            sizes: true,
+            seller: true,
+            bestSeller: true,
+          },
+        },
+        shippingInfo: {
+          select: {
+            city: true,
+            country: true,
+            pincode: true,
+            phoneNumber: true,
+            state: true,
+            streetName: true,
+          },
+        },
+        buyerInfo: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    res.status(201).json({
+      message: 'Order placed successfully',
+      orders,
+    });
+  } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };

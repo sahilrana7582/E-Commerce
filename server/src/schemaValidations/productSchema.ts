@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { User, ProductDetail, Order } from '@prisma/client';
 
 export const productSchema = z.object({
   name: z
@@ -32,4 +33,12 @@ export const AddressType = z.object({
   country: z.string(),
   pincode: z.string(),
   phoneNumber: z.string(),
+});
+
+export const orderSchema = z.object({
+  buyer: z.string(),
+  productId: z.string(),
+  quantity: z.number().int().positive(),
+  totalAmount: z.number().positive(),
+  shippingAddress: z.string(),
 });
