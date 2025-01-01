@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   loadUser,
+  logout,
   signIn,
   signUp,
 } from '../controllers/authControllers/authcontroller';
@@ -9,6 +10,8 @@ const authRoutes = express.Router();
 
 authRoutes.route('/signup').post(signUp);
 authRoutes.route('/signin').post(signIn);
+authRoutes.route('/logout').post(logout);
+
 authRoutes.route('/load').get(isAuth, loadUser);
 
 export default authRoutes;

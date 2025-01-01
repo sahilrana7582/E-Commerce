@@ -23,6 +23,8 @@ import { toast } from 'sonner';
 import { useSignIn } from '../../../features/authApi/useSign';
 import { useEffect, useState } from 'react';
 import { Loader } from 'lucide-react';
+import { AuthFlow } from '../../../types';
+import { SignupScreen } from './AuthScreen';
 
 interface LoginModalProp {
   children: React.ReactNode;
@@ -34,7 +36,8 @@ const formSchema = z.object({
 });
 
 export function LoginModal({ children }: LoginModalProp) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [currState, setCurrState] = useState<AuthFlow>('signIn');
   const { singin, isPending, isError, isSuccess } = useSignIn();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,55 +71,76 @@ export function LoginModal({ children }: LoginModalProp) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-center font-lato">Sign In</DialogTitle>
-        </DialogHeader>
-        <Separator />
-        <Form {...form}>
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter Your E-Mail"
-                      {...field}
-                      className="bg-zinc-300/40 focus-visible:ring-0 focus-visible:ring-offset-0 border-none rounded-[3px]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-rose-700" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter Your Password"
-                      {...field}
-                      className="bg-zinc-300/40 focus-visible:ring-0 focus-visible:ring-offset-0 border-none rounded-[3px]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-rose-700" />
-                </FormItem>
-              )}
-            />
-            <Button className="bg-black text-white hover:bg-black/80 rounded-[5px] w-full">
-              {isPending ? (
-                <Loader className="w-4 h-4 animate-spin" />
-              ) : (
-                `
+        {currState === 'signIn' ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-center font-lato">
+                Sign In
+              </DialogTitle>
+            </DialogHeader>
+            <Separator />
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter Your E-Mail"
+                          {...field}
+                          className="bg-zinc-300/40 focus-visible:ring-0 focus-visible:ring-offset-0 border-none rounded-[3px]"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-rose-700" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter Your Password"
+                          {...field}
+                          className="bg-zinc-300/40 focus-visible:ring-0 focus-visible:ring-offset-0 border-none rounded-[3px]"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-rose-700" />
+                    </FormItem>
+                  )}
+                />
+                <Button className="bg-black text-white hover:bg-black/80 rounded-[5px] w-full">
+                  {isPending ? (
+                    <Loader className="w-4 h-4 animate-spin" />
+                  ) : (
+                    `
               Sign In
            `
-              )}
-            </Button>
-          </form>
-        </Form>
+                  )}
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  Don't Have Account?{' '}
+                  <span
+                    className="text-blue-700 cursor-pointer"
+                    onClick={() => setCurrState('signUp')}
+                  >
+                    Sign Up
+                  </span>{' '}
+                  Here!
+                </p>
+              </form>
+            </Form>
+          </>
+        ) : (
+          <SignupScreen setCurrState={setCurrState} setOpen={setOpen} />
+        )}
       </DialogContent>
     </Dialog>
   );

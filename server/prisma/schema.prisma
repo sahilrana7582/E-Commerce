@@ -29,10 +29,47 @@ model User{
   password  String
   imageUrl  String?  @db.Text
   role      Role?    @default(USER)
+  listedProducts ProductDetail[]
 
 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+enum Gender {
+  Male
+  Female
+}
+
+enum SubCategory  {
+  TopWear
+  BottomWear
+}
+
+enum Size {
+  SMALL
+  MEDIUM
+  LARGE
+  XL
+  XXL
+}
+model ProductDetail {
+  id           String       @id @default(uuid())
+  name         String
+  description  String       @db.Text
+  category     String      
+  subCategory  String       
+  price        Decimal
+  sizes        Size[]
+  sellerInfo   User         @relation(fields: [seller], references: [id], onDelete: Cascade)
+  seller       String       
+
+
+
+  
+  createdAt    DateTime     @default(now()) 
+  updatedAt    DateTime     @updatedAt      
 }
 

@@ -3,9 +3,12 @@ import { Button } from '../../ui/button';
 import { LoginModal } from '../../providers/modals/LoginModa';
 import useAuth from '../../../hooks/useAuth';
 import ProfileModal from '../../providers/modals/profileModal';
+import { useEffect } from 'react';
 
 const AccountComp = () => {
   const { user } = useAuth();
+
+  useEffect(() => {}, [user]);
 
   return (
     <div className="w-full flex justify-evenly items-center">

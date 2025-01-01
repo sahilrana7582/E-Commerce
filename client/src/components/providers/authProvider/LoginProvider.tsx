@@ -7,6 +7,7 @@ type User = {
   imageUrl: string;
   email: string;
   id: string;
+  role: string;
 };
 
 type AuthContextType = {
@@ -36,4 +37,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-
