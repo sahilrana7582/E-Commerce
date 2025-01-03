@@ -3,8 +3,10 @@ import {
   AddressType,
   orderSchema,
   productSchema,
+  ProductType,
 } from '../../schemaValidations/productSchema';
 import { prisma } from '../../prisma';
+import { ProductDetail } from '@prisma/client';
 
 export const addNewProduct = async (req: Request, res: Response) => {
   try {
@@ -172,6 +174,30 @@ export const allOrders = async (req: Request, res: Response) => {
     res.status(201).json({
       message: 'Order placed successfully',
       orders,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const bestSellersProducts = async (req: Request, res: Response) => {
+  try {
+    console.log('Running');
+    const products = await prisma.productDetail.findMany({
+      where: {
+        bestSeller: true,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    res.status(201).json({
+      message: 'Best Sellers',
+      length: products.length,
+      products,
     });
   } catch (e) {
     console.log(e);

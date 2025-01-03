@@ -10,6 +10,7 @@ import {
   addAddress,
   addNewProduct,
   allOrders,
+  bestSellersProducts,
   getAllProducts,
   orderProduct,
   productDetail,
@@ -18,6 +19,8 @@ const productRoutes = express.Router();
 
 productRoutes.route('/add').post(addNewProduct);
 productRoutes.route('/').get(getAllProducts);
+productRoutes.route('/bestSellers').get(bestSellersProducts);
+
 productRoutes.route('/order').post(orderProduct).get(allOrders);
 
 productRoutes.route('/:id').get(productDetail);
