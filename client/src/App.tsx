@@ -4,6 +4,7 @@ import Home from './components/HomeComponents/Home';
 import Admin from './pages/AdminsPage/Admin';
 import NewItem from './pages/AdminsPage/NewItems';
 import { ListTable } from './pages/AdminsPage/ListTable';
+import Collection from './pages/collection/Collection';
 
 const routes = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const routes = createBrowserRouter([
       },
       {
         path: '/collection',
-        element: <div>This is Home</div>,
+        element: <Collection />,
       },
       {
         path: '/about',

@@ -204,3 +204,39 @@ export const bestSellersProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const filterProducts = async (req: Request, res: Response) => {
+  try {
+    const { genders, sizes, category } = req.query;
+
+    // Build filters dynamically
+    const filters: any = {};
+
+    if (genders) {
+      filters.category = { in: (genders as string).split(',') }; // Gender filter
+    }
+
+    if (sizes) {
+      filters.sizes = { hasSome: (sizes as string).split(',') }; // Size filter
+    }
+
+    if (category) {
+      filters.subCategory = { in: (category as string).split(',') }; // Category filter
+    }
+
+    // Fetch filtered products from the database using Prisma
+    const products = await prisma.productDetail.findMany({
+      where: filters, // Apply filters to the query
+    });
+
+    // Send the response with filtered products
+    res.status(200).json({
+      message: 'Filtered Products Retrieved',
+      length: products.length,
+      products, // Return the filtered products
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

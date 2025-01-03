@@ -11,6 +11,7 @@ import {
   addNewProduct,
   allOrders,
   bestSellersProducts,
+  filterProducts,
   getAllProducts,
   orderProduct,
   productDetail,
@@ -18,7 +19,9 @@ import {
 const productRoutes = express.Router();
 
 productRoutes.route('/add').post(addNewProduct);
-productRoutes.route('/').get(getAllProducts);
+productRoutes.route('/').get(getAllProducts).get(filterProducts);
+productRoutes.route('/collection/').get(filterProducts);
+
 productRoutes.route('/bestSellers').get(bestSellersProducts);
 
 productRoutes.route('/order').post(orderProduct).get(allOrders);
