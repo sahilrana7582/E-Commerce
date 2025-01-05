@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import productRoutes from './routes/productRoutes';
+import addressRoutes from './routes/addressRoutes';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(express.json());
 
 app.use('/api/v1/user', authRoutes);
 app.use('/api/v1/product', productRoutes);
+app.use('/api/v1/address', addressRoutes);
 
 const port = process.env.PORT;
 

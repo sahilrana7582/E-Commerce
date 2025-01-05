@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Product } from '../../types';
 import { Button } from '../ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -6,12 +5,15 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
+import ToolTip from '../providers/extraProviders/ToolTip';
+import { useDispatch } from 'react-redux';
+
+import { addItem } from '../../store/cartSlice';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 type ProductInfo = Product;
 
@@ -20,7 +22,17 @@ interface ProductProps {
 }
 
 const ProductDescription = ({ productInfo }: ProductProps) => {
-  const [info, setInfo] = useState('des');
+  const dispatch = useDispatch();
+  const [sizeSelected, setSize] = useState<
+    'SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL' | ''
+  >('');
+
+  const handleAddToCart = () => {
+    if (sizeSelected !== '') {
+      dispatch(addItem({ ...productInfo, sizes: sizeSelected, quantity: 1 }));
+      toast.success('Product Added');
+    }
+  };
   return (
     <div className="flex flex-col gap-10">
       <div className="space-y-2">
@@ -81,13 +93,25 @@ const ProductDescription = ({ productInfo }: ProductProps) => {
         <small className="text-sm font-medium leading-none">Select Size</small>
         <div className="flex  gap-4">
           {productInfo?.sizes.map((size) => (
-            <div className="flex justify-center items-center bg-gray-200 p-4 rounded-[5px] cursor-pointer">
-              <small>{size}</small>
-            </div>
+            <ToolTip align="center" label={size} side="top" key={size}>
+              <div
+                className={`flex justify-center items-center p-4 rounded-[5px] cursor-pointer ${
+                  size === sizeSelected
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-black'
+                }`}
+                onClick={() => setSize(size)}
+              >
+                <small>{size}</small>
+              </div>
+            </ToolTip>
           ))}
         </div>
       </div>
-      <Button className="bg-black/90 text-white hover:bg-black rounded-[5px]">
+      <Button
+        className="bg-black/90 text-white hover:bg-black rounded-[5px]"
+        onClick={handleAddToCart}
+      >
         Add To Cart
       </Button>
     </div>

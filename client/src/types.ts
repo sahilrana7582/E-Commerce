@@ -15,7 +15,7 @@ export type ProductList = {
   id: string;
   name: string;
   category: 'Male' | 'Female';
-  imageUrl: string;
+  mainImg: string;
   price: number;
 };
 
@@ -30,4 +30,16 @@ export type Product = {
   seller: string;
   bestSeller: boolean;
   mainImg: string;
+};
+
+export type CartProduct = {
+  id: string;
+  name: string;
+  category: 'Male' | 'Female';
+  subCategory: 'TopWear' | 'BottomWear';
+  price: number;
+  sizes: 'SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL';
+  seller: string;
+  mainImg: string;
+  quantity: number;
 };

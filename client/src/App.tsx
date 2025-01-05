@@ -6,6 +6,7 @@ import NewItem from './pages/AdminsPage/NewItems';
 import { ListTable } from './pages/AdminsPage/ListTable';
 import Collection from './pages/collection/Collection';
 import ProductInfo from './components/productComponent/ProductInfo';
+import Cart from './pages/cartPage/cart';
 
 const routes = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const routes = createBrowserRouter([
       {
         path: '/product/:id',
         element: <ProductInfo />,
+      },
+      {
+        path: '/cart',
+        element: <Cart />,
       },
       {
         path: '',

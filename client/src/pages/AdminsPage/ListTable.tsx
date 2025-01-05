@@ -11,11 +11,10 @@ import {
 } from '../../components/ui/table';
 import { useActiveList } from '../../features/productApi/useActiveList';
 import { ProductList } from '../../types';
-import UserAvatar from '../../components/providers/modals/UserAvatar';
-import { Avatar, AvatarImage } from '../../components/ui/avatar';
 
 export function ListTable() {
   const { isLoading, productList } = useActiveList();
+  console.log(productList);
   return (
     <div className="relative max-h-screen overflow-hidden border ">
       <Table className="table-auto w-full">
@@ -23,7 +22,7 @@ export function ListTable() {
         <TableHeader className="sticky top-0 bg-gray-200 z-10 border">
           <TableRow>
             <TableHead className="w-[150px]">Image</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead className="text-end">Name</TableHead>
             <TableHead className="text-center">Category</TableHead>
             <TableHead className="text-right">Price</TableHead>
             <TableHead className="text-right">Action</TableHead>
@@ -43,12 +42,14 @@ export function ListTable() {
                   <TableRow key={product.id}>
                     <TableCell className="items-start">
                       <img
-                        src="https://github.com/shadcn.png"
-                        className="w-12 h-12 rounded-[10px]"
+                        src={product.mainImg}
+                        className="w-[150px] h-[200px] rounded-[10px]"
                       />
                     </TableCell>
 
-                    <TableCell>{product.name}</TableCell>
+                    <TableCell className="text-start">
+                      {product.name.slice(0, 10)}
+                    </TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell className="text-right">
                       {product.price}

@@ -2,15 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-export const useProductInfo = (id: string) => {
+export const useAddress = () => {
   const {
-    data: productInfo,
+    data: addressInfo,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['activeList', id],
+    queryKey: ['Address'],
     queryFn: async () => {
-      const resp = await fetch(`${baseUrl}/product/${id}`, {
+      const resp = await fetch(`${baseUrl}/address/`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -21,12 +21,12 @@ export const useProductInfo = (id: string) => {
 
       const data = await resp.json();
 
-      return data.product;
+      return data.address;
     },
   });
 
   return {
-    productInfo,
+    addressInfo,
     isError,
     isLoading,
   };

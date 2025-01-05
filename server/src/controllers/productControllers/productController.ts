@@ -94,6 +94,25 @@ export const addAddress = async (req: Request, res: Response) => {
   }
 };
 
+export const getAddress = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.user.id;
+
+    const address = await prisma.address.findFirst({
+      where: {
+        userId,
+      },
+    });
+    res.status(201).json({
+      address,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 export const productDetail = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;

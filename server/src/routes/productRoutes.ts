@@ -12,6 +12,7 @@ import {
   allOrders,
   bestSellersProducts,
   filterProducts,
+  getAddress,
   getAllProducts,
   orderProduct,
   productDetail,
@@ -27,6 +28,6 @@ productRoutes.route('/bestSellers').get(bestSellersProducts);
 productRoutes.route('/order').post(orderProduct).get(allOrders);
 
 productRoutes.route('/:id').get(productDetail);
-productRoutes.route('/address').post(isAuth, addAddress);
+productRoutes.route('/address').post(isAuth, addAddress).get(getAddress);
 
 export default productRoutes;
