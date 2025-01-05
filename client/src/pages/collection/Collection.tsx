@@ -2,14 +2,14 @@ import { useState } from 'react';
 import Filter from './Filter';
 import AllProducts from './AllProducts';
 
-type Filter = {
+type Filters = {
   genders: string[];
   sizes: string[];
   category: string[];
 };
 
 const Collection = () => {
-  const [filter, setFilter] = useState<Filter>({
+  const [filter, setFilter] = useState<Filters>({
     genders: [],
     sizes: [],
     category: [],

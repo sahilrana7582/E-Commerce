@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { Product } from '../../types';
+import { Card, CardContent } from '../ui/card';
 
 interface ProductCardProps {
   product: Product;
@@ -6,16 +8,23 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <div className="w-full h-full hover:transform hover:scale-105 transition-transform cursor-pointer">
-      <img
-        src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTiQWpzXLKIH5MqFJjaITu8lobHRN718OaoA-RUt_Do57Risz1_aUl2LgL8Adv56Zyl4oW7Yf774tQNlQe8wSRkCUwwnzGqmwQWuMZkq8OZDI2cFPZ1fPKS0A&usqp=CAE"
-        className="rounded-t-[10px] w-full  object-cover"
-      />
-      <div>
-        <h1 className="text-base font-lato font-medium">{product.name}</h1>
-        <p className="text-sm">${product.price}</p>
-      </div>
-    </div>
+    <Link to={`/product/${product.id}`}>
+      <Card className="w-[350px]">
+        <CardContent className="p-2">
+          <img
+            src={product.mainImg}
+            alt={product.name}
+            className="w-full h-[350px] object-cover rounded-md"
+          />
+          <h1 className="text-sm mt-2 font-semibold font-lato  text-center">
+            {product.name}
+          </h1>
+          <p className="text-sm font-medium text-gray-800 text-center">
+            ${product.price}
+          </p>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 

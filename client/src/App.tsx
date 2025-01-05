@@ -5,12 +5,17 @@ import Admin from './pages/AdminsPage/Admin';
 import NewItem from './pages/AdminsPage/NewItems';
 import { ListTable } from './pages/AdminsPage/ListTable';
 import Collection from './pages/collection/Collection';
+import ProductInfo from './components/productComponent/ProductInfo';
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: <HomeLayout />,
     children: [
+      {
+        path: '/product/:id',
+        element: <ProductInfo />,
+      },
       {
         path: '',
         element: <Home />,

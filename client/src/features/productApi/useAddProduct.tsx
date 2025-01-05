@@ -32,6 +32,7 @@ export const useAddProduct = (reset: any) => {
       reset();
     },
     onError: (err) => {
+      console.log(err);
       toast.error(`Error: ${(err as Error).message}`);
     },
   });

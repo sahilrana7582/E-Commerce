@@ -25,6 +25,8 @@ import useAuth from '../../hooks/useAuth';
 import { ProductType } from '../../types';
 import { useAddProduct } from '../../features/productApi/useAddProduct';
 import { Loader } from 'lucide-react';
+import { MyDropzone } from './Dropzone';
+import { useState } from 'react';
 
 const formSchema = z.object({
   name: z
@@ -49,7 +51,7 @@ const formSchema = z.object({
   sizes: z.array(z.enum(['SMALL', 'MEDIUM', 'LARGE', 'XL', 'XXL'])).min(1, {
     message: 'At least one size must be selected',
   }),
-  seller: z.string().optional(),
+  bestSeller: z.boolean().optional(),
 });
 
 const sizesOptions = [
@@ -61,6 +63,8 @@ const sizesOptions = [
 ];
 
 const NewItem = () => {
+  const [imgs, setImgs] = useState<string[]>([]);
+
   const { user } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,22 +72,26 @@ const NewItem = () => {
       name: '',
       description: '',
       sizes: [],
+      bestSeller: false,
     },
   });
 
   const { addProduct, isPending } = useAddProduct(form.reset);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log(data);
     const productInfo: ProductType = {
       ...data,
       seller: user.id,
+      imgs,
     };
 
     addProduct(productInfo);
   };
 
   return (
-    <div>
+    <div className="space-y-6">
+      <MyDropzone setImgs={setImgs} imgs={imgs} />
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField

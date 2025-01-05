@@ -17,7 +17,7 @@ const ProductSection = ({ products, type, isLoading }: ProductSectionProps) => {
           <Loader className="w-5 h-5 animate-spin" />
         ) : (
           <>
-            <h1 className="text-4xl font-bold text-center font-montserrat">
+            <h1 className="text-4xl font-semibold text-center font-lato">
               {type}
             </h1>
             <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-3 grid-rows-2">

@@ -8,6 +8,7 @@ export type ProductType = {
   price: number;
   sizes: ('SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL')[];
   seller: string;
+  imgs: string[];
 };
 
 export type ProductList = {
@@ -19,6 +20,7 @@ export type ProductList = {
 };
 
 export type Product = {
+  id: string;
   name: string;
   description: string;
   category: 'Male' | 'Female';
@@ -27,4 +29,5 @@ export type Product = {
   sizes: ('SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL')[];
   seller: string;
   bestSeller: boolean;
+  mainImg: string;
 };

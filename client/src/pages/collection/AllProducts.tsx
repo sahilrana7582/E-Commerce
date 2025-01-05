@@ -19,13 +19,15 @@ const AllProducts = ({ filter }: AllProductsProp) => {
       <div>
         <h1 className="font-lato font-medium text-lg">All Category</h1>
       </div>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="flex flex-wrap gap-4">
         {isLoading ? (
           <Loader className="w-5 h-5 animate-spin" />
         ) : (
           <>
             {data.map((product) => (
-              <ProductCard product={product} />
+              <div key={product.id} className="flex justify-center">
+                <ProductCard product={product} />
+              </div>
             ))}
           </>
         )}

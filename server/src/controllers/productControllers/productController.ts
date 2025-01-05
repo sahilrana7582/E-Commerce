@@ -11,8 +11,9 @@ import { ProductDetail } from '@prisma/client';
 export const addNewProduct = async (req: Request, res: Response) => {
   try {
     const isSafe = productSchema.safeParse(req.body);
+
     if (!isSafe.success) {
-      return res.status(400).json({ message: isSafe.error.errors[0].message });
+      return res.status(410).json({ message: isSafe.error.errors[0].message });
     }
     const {
       name,
@@ -23,6 +24,7 @@ export const addNewProduct = async (req: Request, res: Response) => {
       sizes,
       seller,
       bestSeller,
+      imgs,
     } = isSafe.data;
 
     const product = await prisma.productDetail.create({
@@ -35,6 +37,8 @@ export const addNewProduct = async (req: Request, res: Response) => {
         sizes,
         seller,
         bestSeller,
+        mainImg: imgs[0],
+        imgs,
       },
     });
     res.status(201).json({
@@ -96,6 +100,16 @@ export const productDetail = async (req: Request, res: Response) => {
     const product = await prisma.productDetail.findUnique({
       where: {
         id: productId,
+      },
+      include: {
+        sellerInfo: {
+          select: {
+            firstName: true,
+            email: true,
+            lastName: true,
+            imageUrl: true,
+          },
+        },
       },
     });
 

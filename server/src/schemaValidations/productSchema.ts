@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
 import { User, ProductDetail, Order } from '@prisma/client';
 
 export const productSchema = z.object({
@@ -21,7 +21,8 @@ export const productSchema = z.object({
     .min(1, { message: 'At least one size must be selected' }),
 
   seller: z.string().min(1, { message: 'Seller ID is required' }),
-  bestSeller: z.boolean(),
+  bestSeller: z.boolean().optional(),
+  imgs: z.array(z.string()),
 });
 
 export type ProductType = z.infer<typeof productSchema>;

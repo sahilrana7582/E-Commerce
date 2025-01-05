@@ -71,7 +71,9 @@ model ProductDetail {
   sizes        Size[]
   sellerInfo   User         @relation(fields: [seller], references: [id], onDelete: Cascade)
   seller       String    
-  bestSeller   Boolean      @default(false)   
+  bestSeller   Boolean      @default(false)
+  mainImg      String       @db.Text
+  imgs         String[]  
 
 
   Order        Order[]
