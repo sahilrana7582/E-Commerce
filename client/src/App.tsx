@@ -7,6 +7,7 @@ import { ListTable } from './pages/AdminsPage/ListTable';
 import Collection from './pages/collection/Collection';
 import ProductInfo from './components/productComponent/ProductInfo';
 import Cart from './pages/cartPage/cart';
+import Orders from './pages/AdminsPage/Orders';
 
 const routes = createBrowserRouter([
   {
@@ -51,7 +52,7 @@ const routes = createBrowserRouter([
           },
           {
             path: 'orders',
-            element: <div>Orders</div>,
+            element: <Orders />,
           },
         ],
       },

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import {
   AddressType,
-  orderSchema,
+  OrderSchema,
   productSchema,
   ProductType,
 } from '../../schemaValidations/productSchema';
@@ -90,6 +90,7 @@ export const addAddress = async (req: Request, res: Response) => {
       message: 'Address added successfully',
     });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -143,27 +144,33 @@ export const productDetail = async (req: Request, res: Response) => {
 
 export const orderProduct = async (req: Request, res: Response) => {
   try {
-    const isSafe = orderSchema.safeParse(req.body);
+    const isSafe = OrderSchema.safeParse(req.body);
+    console.log(req.body);
     if (!isSafe.success) {
-      console.log(isSafe.error);
+      console.log(isSafe.error.errors);
       return res.status(400).json({ message: isSafe.error.errors[0].message });
     }
-    const { buyer, quantity, shippingAddress, totalAmount, productId } =
-      isSafe.data;
+    const { buyer, shippingAddress, totalAmount, items } = isSafe.data;
 
     const order = await prisma.order.create({
       data: {
-        productId,
-        quantity,
+        buyer,
         totalAmount,
         status: 'ORDERED',
-        buyer,
         shippingAddress,
+        items: {
+          create: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            size: item.size,
+            subTotal: item.subTotal,
+          })),
+        },
       },
     });
+
     res.status(201).json({
-      message: 'Order placed successfully',
-      order,
+      message: 'Order Placed Successfully',
     });
   } catch (e) {
     console.log(e);
@@ -175,37 +182,43 @@ export const allOrders = async (req: Request, res: Response) => {
   try {
     const orders = await prisma.order.findMany({
       include: {
-        product: {
+        buyerInfo: {
           select: {
-            name: true,
-            description: true,
-            price: true,
-            sizes: true,
-            seller: true,
-            bestSeller: true,
+            firstName: true,
+            lastName: true,
+            imageUrl: true,
+            email: true,
           },
         },
         shippingInfo: {
           select: {
             city: true,
             country: true,
-            pincode: true,
             phoneNumber: true,
-            state: true,
+            pincode: true,
             streetName: true,
+            state: true,
           },
         },
-        buyerInfo: {
+        items: {
           select: {
-            email: true,
-            firstName: true,
-            lastName: true,
+            product: {
+              select: {
+                mainImg: true,
+                name: true,
+                subCategory: true,
+              },
+            },
+            quantity: true,
+            size: true,
+            subTotal: true,
           },
         },
       },
     });
     res.status(201).json({
-      message: 'Order placed successfully',
+      message: 'All Order',
+      length: orders.length,
       orders,
     });
   } catch (e) {
@@ -242,7 +255,6 @@ export const filterProducts = async (req: Request, res: Response) => {
   try {
     const { genders, sizes, category } = req.query;
 
-    // Build filters dynamically
     const filters: any = {};
 
     if (genders) {
@@ -254,19 +266,17 @@ export const filterProducts = async (req: Request, res: Response) => {
     }
 
     if (category) {
-      filters.subCategory = { in: (category as string).split(',') }; // Category filter
+      filters.subCategory = { in: (category as string).split(',') };
     }
 
-    // Fetch filtered products from the database using Prisma
     const products = await prisma.productDetail.findMany({
-      where: filters, // Apply filters to the query
+      where: filters,
     });
 
-    // Send the response with filtered products
     res.status(200).json({
       message: 'Filtered Products Retrieved',
       length: products.length,
-      products, // Return the filtered products
+      products,
     });
   } catch (e) {
     console.log(e);

@@ -76,7 +76,7 @@ model ProductDetail {
   imgs         String[]  
 
 
-  Order        Order[]
+  Order        OrderItem[]
 
 
 
@@ -116,25 +116,30 @@ model Address {
 
 
 
-model Order{
+model Order {
+  id               String       @id @default(uuid())
+  buyer            String
+  buyerInfo        User         @relation(fields: [buyer], references: [id], onDelete: Cascade)
+  items            OrderItem[]
+  totalAmount      Decimal
+  status           Status       @default(ORDERED)
+  shippingAddress  String
+  shippingInfo     Address      @relation(fields: [shippingAddress], references: [id], onDelete: Cascade)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+
+
+model OrderItem {
   id           String       @id @default(uuid())
+  orderId      String
+  order        Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId    String
   product      ProductDetail @relation(fields: [productId], references: [id], onDelete: Cascade)
-  buyerInfo    User         @relation(fields: [buyer], references: [id], onDelete: Cascade)
-  buyer        String
   quantity     Int
-  totalAmount  Decimal
-  status       Status       @default(ORDERED)
-
-
-  shippingAddress String
-  shippingInfo  Address     @relation(fields: [shippingAddress], references: [id], onDelete: Cascade)
-
-
-
-
-
+  size         Size
+  subTotal     Decimal 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 }
-

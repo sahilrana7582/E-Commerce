@@ -48,16 +48,16 @@ const formSchema = z.object({
       message: 'Price must be a valid number greater than 0',
     })
     .transform((value) => parseFloat(value)),
-  sizes: z.array(z.enum(['SMALL', 'MEDIUM', 'LARGE', 'XL', 'XXL'])).min(1, {
+  sizes: z.array(z.enum(['S', 'M', 'L', 'XL', 'XXL'])).min(1, {
     message: 'At least one size must be selected',
   }),
   bestSeller: z.boolean().optional(),
 });
 
 const sizesOptions = [
-  { label: 'S', value: 'SMALL' },
-  { label: 'M', value: 'MEDIUM' },
-  { label: 'L', value: 'LARGE' },
+  { label: 'S', value: 'S' },
+  { label: 'M', value: 'M' },
+  { label: 'L', value: 'L' },
   { label: 'XL', value: 'XL' },
   { label: 'XXL', value: 'XXL' },
 ];
@@ -76,13 +76,16 @@ const NewItem = () => {
     },
   });
 
-  const { addProduct, isPending } = useAddProduct(form.reset);
+  const { addProduct, isPending } = useAddProduct({
+    reset: form.reset,
+    setImgs,
+  });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
     const productInfo: ProductType = {
       ...data,
-      seller: user.id,
+      //@ts-expect-error: user may be null or undefined
+      seller: user?.id,
       imgs,
     };
 
@@ -219,24 +222,14 @@ const NewItem = () => {
                       key={size.value}
                       className={`p-4 mb-2 min-w-12 min-h-12 text-center rounded-[5px] border  cursor-pointer ${
                         field.value.includes(
-                          size.value as
-                            | 'SMALL'
-                            | 'MEDIUM'
-                            | 'LARGE'
-                            | 'XL'
-                            | 'XXL'
+                          size.value as 'S' | 'M' | 'L' | 'XL' | 'XXL'
                         )
                           ? 'bg-blue-500 text-white'
                           : 'bg-gray-100'
                       }`}
                       onClick={() => {
                         const isSelected = field.value.includes(
-                          size.value as
-                            | 'SMALL'
-                            | 'MEDIUM'
-                            | 'LARGE'
-                            | 'XL'
-                            | 'XXL'
+                          size.value as 'S' | 'M' | 'L' | 'XL' | 'XXL'
                         );
                         if (isSelected) {
                           field.onChange(

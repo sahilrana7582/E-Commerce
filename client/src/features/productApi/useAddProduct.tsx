@@ -3,8 +3,12 @@ import { toast } from 'sonner';
 import { ProductType } from '../../types';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
+interface Props {
+  setImgs: React.Dispatch<React.SetStateAction<string[]>>;
+  reset: () => void;
+}
 
-export const useAddProduct = (reset: any) => {
+export const useAddProduct = ({ reset, setImgs }: Props) => {
   const {
     mutate: addProduct,
     isError,
@@ -30,6 +34,7 @@ export const useAddProduct = (reset: any) => {
     onSuccess: () => {
       toast.success('Product added successfully');
       reset();
+      setImgs([]);
     },
     onError: (err) => {
       console.log(err);

@@ -23,9 +23,9 @@ interface ProductProps {
 
 const ProductDescription = ({ productInfo }: ProductProps) => {
   const dispatch = useDispatch();
-  const [sizeSelected, setSize] = useState<
-    'SMALL' | 'MEDIUM' | 'LARGE' | 'XL' | 'XXL' | ''
-  >('');
+  const [sizeSelected, setSize] = useState<'S' | 'M' | 'L' | 'XL' | 'XXL' | ''>(
+    ''
+  );
 
   const handleAddToCart = () => {
     if (sizeSelected !== '') {

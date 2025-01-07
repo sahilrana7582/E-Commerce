@@ -5,14 +5,41 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { useAddress } from '../../features/addressApi/useAddress';
 import { Loader } from 'lucide-react';
+import { AddressType, Order } from '../../types';
+import useAuth from '../../hooks/useAuth';
+import { useNewOrder } from '../../features/order/useNewOrder';
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isPending, orderProduct } = useNewOrder();
   const cartItems = useSelector((state: RootState) => state.cart.items);
-  const { addressInfo, isLoading: addressLoading } = useAddress();
+  const { addressInfo: Address, isLoading: addressLoading } = useAddress();
   const total = useSelector((state: RootState) => state.cart.total);
   const tax = (total * 0.2).toFixed(2);
-  console.log(addressInfo);
+
+  const addressInfo: AddressType = Address;
+
+  const handleOrder = () => {
+    if (cartItems.length != 0) {
+      const orderItem: Order = {
+        //@ts-expect-error: user.id migh be undefined
+        buyer: user.id,
+        shippingAddress: addressInfo.id,
+        status: 'ORDERED',
+        totalAmount: total,
+        items: cartItems.map((item) => ({
+          productId: item.id,
+          size: item.sizes,
+          subTotal: item.price * item.quantity,
+          ...item,
+        })),
+      };
+      console.log(JSON.stringify(orderItem));
+      orderProduct({ ...orderItem });
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-screen bg-gray-50 p-6">
       <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col  h-full overflow-auto">
@@ -40,7 +67,7 @@ const Cart = () => {
                       <img
                         src={item.mainImg}
                         alt={item.name}
-                        className="w-full h-48 object-cover rounded-lg shadow-lg"
+                        className="w-full h-48 object-cover rounded-[10px] shadow-lg"
                       />
                     </div>
 
@@ -134,8 +161,13 @@ const Cart = () => {
         <Button
           variant="default"
           className="w-full mt-6 bg-black/90 hover:bg-black text-white rounded-[5px]"
+          onClick={handleOrder}
         >
-          Checkout
+          {isPending ? (
+            <Loader className="w-4 h-4 animate-spin" />
+          ) : (
+            'Make Order'
+          )}
         </Button>
       </div>
     </div>

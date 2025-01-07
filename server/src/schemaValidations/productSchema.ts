@@ -17,7 +17,7 @@ export const productSchema = z.object({
   price: z.number().min(0.1, { message: 'Price must be a positive number' }),
 
   sizes: z
-    .array(z.enum(['SMALL', 'MEDIUM', 'LARGE', 'XL', 'XXL']))
+    .array(z.enum(['S', 'M', 'L', 'XL', 'XXL']))
     .min(1, { message: 'At least one size must be selected' }),
 
   seller: z.string().min(1, { message: 'Seller ID is required' }),
@@ -36,10 +36,21 @@ export const AddressType = z.object({
   phoneNumber: z.string(),
 });
 
-export const orderSchema = z.object({
-  buyer: z.string(),
-  productId: z.string(),
-  quantity: z.number().int().positive(),
-  totalAmount: z.number().positive(),
-  shippingAddress: z.string(),
+const StatusEnum = z.enum(['ORDERED', 'SHIPPED', 'DELIVERED', 'CANCELLED']);
+
+const SizeEnum = z.enum(['S', 'M', 'L', 'XL', 'XXL']);
+
+export const OrderItemSchema = z.object({
+  productId: z.string().uuid(),
+  quantity: z.number().int().min(1),
+  size: SizeEnum,
+  subTotal: z.number().min(0),
+});
+
+export const OrderSchema = z.object({
+  buyer: z.string().uuid(),
+  totalAmount: z.number().min(0),
+  status: StatusEnum.default('ORDERED'),
+  shippingAddress: z.string().uuid(),
+  items: z.array(OrderItemSchema),
 });

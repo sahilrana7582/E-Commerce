@@ -14,7 +14,6 @@ import { ProductList } from '../../types';
 
 export function ListTable() {
   const { isLoading, productList } = useActiveList();
-  console.log(productList);
   return (
     <div className="relative max-h-screen overflow-hidden border ">
       <Table className="table-auto w-full">
