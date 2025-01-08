@@ -1,4 +1,4 @@
-import { Box, EllipsisVertical, Loader } from 'lucide-react';
+import { Box, EllipsisVertical, Loader, Trash } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -6,13 +6,34 @@ import {
   TableRow,
 } from '../../components/ui/table';
 import { useAllOrder } from '../../features/order/useAllOrder';
-import { OrdersResponse } from '../../types';
+import { OrdersResponse, statusType } from '../../types';
 import ToolTip from '../../components/providers/extraProviders/ToolTip';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from '../../components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../components/ui/dropdown-menu';
+import { useEditOrder } from '../../features/order/useEditStatus';
 
 const Orders = () => {
   const { allOrders, isLoading } = useAllOrder();
+  const { editOrder, isPending } = useEditOrder();
 
   const orderResponse: OrdersResponse = allOrders;
+
+  const handleChangeState = (id: string, data: statusType) => {
+    editOrder({ id, status: data });
+  };
 
   return (
     <div className="relative max-h-screen overflow-hidden border ">
@@ -83,9 +104,81 @@ const Orders = () => {
                             {order.shippingInfo.phoneNumber}
                           </small>
                         </div>
+                        <div className="flex gap-2 items-center mt-2">
+                          <small className="text-sm font-semibold text-red-600 leading-none">
+                            Status:
+                          </small>{' '}
+                          <Select
+                            defaultValue="ORDERED"
+                            onValueChange={(value: statusType) =>
+                              handleChangeState(order.id, value)
+                            }
+                          >
+                            <SelectTrigger>{order.status}</SelectTrigger>
+                            <SelectContent className="bg-white">
+                              <SelectGroup>
+                                <SelectLabel>Status</SelectLabel>
+                                <SelectItem
+                                  value="ORDERED"
+                                  className="cursor-pointer"
+                                >
+                                  Ordered
+                                </SelectItem>
+                                <SelectItem
+                                  value="PROCESSING"
+                                  className="cursor-pointer"
+                                >
+                                  Processing
+                                </SelectItem>
+                                <SelectItem
+                                  value="CONFIRMED"
+                                  className="cursor-pointer"
+                                >
+                                  Confirmed
+                                </SelectItem>
+                                <SelectItem
+                                  value="PACKED"
+                                  className="cursor-pointer"
+                                >
+                                  Packed
+                                </SelectItem>
+                                <SelectItem
+                                  value="OUT_FOR_DELIVERY"
+                                  className="cursor-pointer"
+                                >
+                                  Out for Delivery
+                                </SelectItem>
+                                <SelectItem
+                                  value="DELIVERED"
+                                  className="cursor-pointer"
+                                >
+                                  Delivered
+                                </SelectItem>
+                                <SelectItem
+                                  value="CANCELLED"
+                                  className="cursor-pointer"
+                                >
+                                  Cancelled
+                                </SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                       <ToolTip align="center" label="Edit Status" side="left">
-                        <EllipsisVertical />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <EllipsisVertical className="cursor-pointer" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuGroup>
+                              <DropdownMenuItem className="text-rose-600 hover:text-rose-700 cursor-pointer">
+                                <Trash className="text-rose-600" />
+                                Delete Order
+                              </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </ToolTip>
                     </div>
                   </TableRow>

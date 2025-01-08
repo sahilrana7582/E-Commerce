@@ -54,3 +54,16 @@ export const OrderSchema = z.object({
   shippingAddress: z.string().uuid(),
   items: z.array(OrderItemSchema),
 });
+
+const OrderStatus = z.enum([
+  'ORDERED',
+  'PROCESSING',
+  'CONFIRMED',
+  'PACKED',
+  'OUT_FOR_DELIVERY',
+  'DELIVERED',
+  'CANCELLED',
+]);
+export const orderStatus = z.object({
+  status: OrderStatus,
+});

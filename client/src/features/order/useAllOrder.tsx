@@ -8,7 +8,7 @@ export const useAllOrder = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['bestSellers'],
+    queryKey: ['All Orders'],
     queryFn: async () => {
       const resp = await fetch(`${baseUrl}/product/order`, {
         method: 'GET',

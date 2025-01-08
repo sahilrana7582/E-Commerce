@@ -11,6 +11,7 @@ import {
   addNewProduct,
   allOrders,
   bestSellersProducts,
+  editOrderStatus,
   filterProducts,
   getAddress,
   getAllProducts,
@@ -26,6 +27,7 @@ productRoutes.route('/collection/').get(filterProducts);
 productRoutes.route('/bestSellers').get(bestSellersProducts);
 
 productRoutes.route('/order').post(orderProduct).get(allOrders);
+productRoutes.route('/order/:id/status').put(editOrderStatus);
 
 productRoutes.route('/:id').get(productDetail);
 productRoutes.route('/address').post(isAuth, addAddress).get(getAddress);

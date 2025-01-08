@@ -101,3 +101,24 @@ export type orderReceived = {
 };
 
 export type OrdersResponse = orderReceived[];
+
+export type statusType =
+  | 'ORDERED'
+  | 'PROCESSING'
+  | 'CONFIRMED'
+  | 'PACKED'
+  | 'OUT_FOR_DELIVERY'
+  | 'DELIVERED'
+  | 'CANCELLED';
+
+export interface StatusPram {
+  status:
+    | 'ORDERED'
+    | 'PROCESSING'
+    | 'CONFIRMED'
+    | 'PACKED'
+    | 'OUT_FOR_DELIVERY'
+    | 'DELIVERED'
+    | 'CANCELLED';
+  id: string;
+}

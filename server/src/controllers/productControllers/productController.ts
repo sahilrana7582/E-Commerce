@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import {
   AddressType,
   OrderSchema,
+  orderStatus,
   productSchema,
   ProductType,
 } from '../../schemaValidations/productSchema';
@@ -138,6 +139,37 @@ export const productDetail = async (req: Request, res: Response) => {
       product,
     });
   } catch (e) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const editOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const isSafe = orderStatus.safeParse(req.body);
+    console.log(req.body);
+    if (!isSafe.success) {
+      console.log(isSafe.error.errors);
+      return res.status(400).json({ message: isSafe.error.errors[0].message });
+    }
+    const { status } = isSafe.data;
+
+    const { id } = req.params;
+
+    const order = await prisma.order.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
+
+    res.status(201).json({
+      message: 'Order Edited Successfully',
+      order,
+    });
+  } catch (e) {
+    console.log(e);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
